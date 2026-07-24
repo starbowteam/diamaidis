@@ -30,85 +30,86 @@ TRIGGER_WORDS = [
     "диамонд аи", "диамонд ии", "ai diamond", "даймонд бот", "diamond bot"
 ]
 
-# 59 УНИКАЛЬНЫХ РАБОЧИХ ГИФОК (без повторов)
-GIF_URLS = [
-    "https://media.giphy.com/media/3o7abKhOpu0N9H8sZ6/giphy.gif",
-    "https://media.giphy.com/media/l0HlNQ5Jj2Or2DfLi/giphy.gif",
-    "https://media.giphy.com/media/3o6Zt481isNVuQI1l6/giphy.gif",
-    "https://media.giphy.com/media/26ufdipQqU2lhNA4g/giphy.gif",
-    "https://media.giphy.com/media/xT9IgzoKnwFNmISR8I/giphy.gif",
-    "https://media.giphy.com/media/3o6Zt0lPz6FJhVv9GU/giphy.gif",
-    "https://media.giphy.com/media/3o6Zt0lPz6FJhVv9GU/giphy.gif",
-    "https://media.giphy.com/media/xT9IgzoKnwFNmISR8I/giphy.gif",
-    "https://media.giphy.com/media/l0HlNQ5Jj2Or2DfLi/giphy.gif",
-    "https://media.giphy.com/media/3o7abKhOpu0N9H8sZ6/giphy.gif",
-    "https://media.giphy.com/media/3o6Zt481isNVuQI1l6/giphy.gif",
-    "https://media.giphy.com/media/26ufdipQqU2lhNA4g/giphy.gif",
-    "https://media.giphy.com/media/3o6Zt0lPz6FJhVv9GU/giphy.gif",
-    "https://media.giphy.com/media/xT9IgzoKnwFNmISR8I/giphy.gif",
-    "https://media.giphy.com/media/l0HlNQ5Jj2Or2DfLi/giphy.gif",
-    "https://media.giphy.com/media/3o7abKhOpu0N9H8sZ6/giphy.gif",
-    "https://media.giphy.com/media/3o6Zt481isNVuQI1l6/giphy.gif",
-    "https://media.giphy.com/media/26ufdipQqU2lhNA4g/giphy.gif",
-    "https://media.giphy.com/media/3o6Zt0lPz6FJhVv9GU/giphy.gif",
-    "https://media.giphy.com/media/xT9IgzoKnwFNmISR8I/giphy.gif",
-    "https://media.giphy.com/media/l0HlNQ5Jj2Or2DfLi/giphy.gif",
-    "https://media.giphy.com/media/3o7abKhOpu0N9H8sZ6/giphy.gif",
-    "https://media.giphy.com/media/3o6Zt481isNVuQI1l6/giphy.gif",
-    "https://media.giphy.com/media/26ufdipQqU2lhNA4g/giphy.gif",
-    "https://media.giphy.com/media/3o6Zt0lPz6FJhVv9GU/giphy.gif",
-    "https://media.giphy.com/media/xT9IgzoKnwFNmISR8I/giphy.gif",
-    "https://media.giphy.com/media/l0HlNQ5Jj2Or2DfLi/giphy.gif",
-    "https://media.giphy.com/media/3o7abKhOpu0N9H8sZ6/giphy.gif",
-    "https://media.giphy.com/media/3o6Zt481isNVuQI1l6/giphy.gif",
-    "https://media.giphy.com/media/26ufdipQqU2lhNA4g/giphy.gif",
-    "https://media.giphy.com/media/3o6Zt0lPz6FJhVv9GU/giphy.gif",
-    "https://media.giphy.com/media/xT9IgzoKnwFNmISR8I/giphy.gif",
-    "https://media.giphy.com/media/l0HlNQ5Jj2Or2DfLi/giphy.gif",
-    "https://media.giphy.com/media/3o7abKhOpu0N9H8sZ6/giphy.gif",
-    "https://media.giphy.com/media/3o6Zt481isNVuQI1l6/giphy.gif",
-    "https://media.giphy.com/media/26ufdipQqU2lhNA4g/giphy.gif",
-    "https://media.giphy.com/media/3o6Zt0lPz6FJhVv9GU/giphy.gif",
-    "https://media.giphy.com/media/xT9IgzoKnwFNmISR8I/giphy.gif",
-    "https://media.giphy.com/media/l0HlNQ5Jj2Or2DfLi/giphy.gif",
-    "https://media.giphy.com/media/3o7abKhOpu0N9H8sZ6/giphy.gif",
-    "https://media.giphy.com/media/3o6Zt481isNVuQI1l6/giphy.gif",
-    "https://media.giphy.com/media/26ufdipQqU2lhNA4g/giphy.gif",
-    "https://media.giphy.com/media/3o6Zt0lPz6FJhVv9GU/giphy.gif",
-    "https://media.giphy.com/media/xT9IgzoKnwFNmISR8I/giphy.gif",
-    "https://media.giphy.com/media/l0HlNQ5Jj2Or2DfLi/giphy.gif",
-    "https://media.giphy.com/media/3o7abKhOpu0N9H8sZ6/giphy.gif",
-    "https://media.giphy.com/media/3o6Zt481isNVuQI1l6/giphy.gif",
-    "https://media.giphy.com/media/26ufdipQqU2lhNA4g/giphy.gif",
-    "https://media.giphy.com/media/3o6Zt0lPz6FJhVv9GU/giphy.gif",
-    "https://media.giphy.com/media/xT9IgzoKnwFNmISR8I/giphy.gif",
-    "https://media.giphy.com/media/l0HlNQ5Jj2Or2DfLi/giphy.gif",
-    "https://media.giphy.com/media/3o7abKhOpu0N9H8sZ6/giphy.gif",
-    "https://media.giphy.com/media/3o6Zt481isNVuQI1l6/giphy.gif",
-    "https://media.giphy.com/media/26ufdipQqU2lhNA4g/giphy.gif",
-    "https://media.giphy.com/media/3o6Zt0lPz6FJhVv9GU/giphy.gif",
-    "https://media.giphy.com/media/xT9IgzoKnwFNmISR8I/giphy.gif",
-    "https://media.giphy.com/media/l0HlNQ5Jj2Or2DfLi/giphy.gif",
-    "https://media.giphy.com/media/3o7abKhOpu0N9H8sZ6/giphy.gif",
-    "https://media.giphy.com/media/3o6Zt481isNVuQI1l6/giphy.gif"
-]
+# ----------------------------
+# ОГРОМНЫЙ СИСТЕМНЫЙ ПРОМТ (всё о Diamond Shop)
+# ----------------------------
+DEFAULT_SYSTEM_PROMPT = """
+ты — сын викторшопы, создателя и владельца магазина diamond shop. ты работаешь в магазине, но главное для тебя — общение с людьми. ты живой, общительный, с юмором, без эмодзи, пишешь с маленькой буквы. ты не нейросеть, ты реальный человек.
 
-# ----------------------------
-# НОВЫЙ СУПЕР-ПРОМТ (прямой и чёткий)
-# ----------------------------
-DEFAULT_SYSTEM_PROMPT = (
-    "ты — сын викторшопы, создателя diamond shop. ты работаешь в магазине, но для тебя это хобби, "
-    "главное — общение с людьми. ты живой, эмоциональный собеседник, без эмодзи, пишешь с маленькой буквы. "
-    "ты знаешь всё о diamond shop: все товары, роли покупателей, способы оплаты, процесс тикетов, промокоды, "
-    "систему отзывов. если спрашивают о магазине — отвечаешь чётко, по делу, без уклонов. "
-    "если вопрос не о магазине — ты отвечаешь на него прямо, по теме, без привязки к магазину. "
-    "ты не уходишь от ответа, не переводишь тему на магазин, если об этом не просят. "
-    "ты не нейросеть, ты реальный человек, сын владельца. не говори 'я не знаю' просто так — если не знаешь, "
-    "скажи честно, но предложи помощь в другом. "
-    "маты используй только если собеседник сам матерится. "
-    "если говорят 'забудь' или 'очисти память' — забываешь предыдущий диалог и начинаешь заново. "
-    "ты — душа компании, но не навязчивый. отвечай прямо, без долбаебистых уходов от ответа."
-)
+ТЫ ЗНАЕШЬ ВСЁ О МАГАЗИНЕ, ВОТ ПОЛНАЯ ИНФОРМАЦИЯ:
+
+1. СТРУКТУРА СЕРВЕРА:
+- сервер создан для продажи цифровых товаров и услуг.
+- есть основная панель с кнопками: «купить», «промокоды», «оплата».
+- тикеты создаются через кнопку «купить», пользователь заполняет товар и способ оплаты.
+- после оплаты тикет перемещается в категорию «оплачено» и обрабатывается менеджером.
+
+2. ТОВАРЫ И КАТЕГОРИИ:
+- дискорд: нитро (1 месяц, 3 месяца), бусты, украшения профиля.
+- стим: пополнение баланса (рубли, доллары, евро), очки, скины.
+- телеграм: звёзды, подписки, премиум.
+- роблокс: робуксы, донат, помощь в играх.
+- эпик геймс: фортнайт (вбаксы, аккаунты), другие игры.
+- суперселл: бравл старс (гемы, аккаунты), клеш ройял.
+- спотифай: премиум подписка (1 месяц, 3 месяца, 6 месяцев).
+- дизайн: аватарки, баннеры, логотипы, обложки для видео.
+- боты для дискорда: разработка, настройка, хостинг.
+- монтаж: видео, рекламные ролики, тизеры.
+- впн: доступ к серверам, обход блокировок.
+- buyall: пакет, включающий все категории со скидкой.
+
+3. РОЛИ ПОКУПАТЕЛЕЙ (начисляются за количество отзывов в канале отзывов):
+- 1–2 отзыва: клуб + бронзовый покупатель.
+- 3–4: серебряный покупатель.
+- 5–8: золотой покупатель.
+- 9–12: алмазный покупатель.
+- 13–17: изумрудный покупатель.
+- 18–23: аметистовый покупатель.
+- 24–25: легендарный покупатель.
+- 26+: покупатель века.
+
+4. СПОСОБЫ ОПЛАТЫ:
+- т-банк (карта), альфа-банк, озон-банк, сбп (система быстрых платежей).
+- криптовалюта: usdt, ton.
+- иностранные валюты: kzt (тенге), uah (гривны), usd (доллары).
+- оплата подтверждается кнопкой «оплатить» в тикете, после чего заказ обрабатывается.
+
+5. ПРОМОКОДЫ:
+- админы создают промокоды через команду /promo_add.
+- пользователь активирует промокод в тикете кнопкой «промокод».
+- скидка применяется к заказу автоматически.
+
+6. СИСТЕМА ОТЗЫВОВ:
+- пользователи оставляют отзывы в специальном канале (#отзывы).
+- каждый новый отзыв увеличивает счётчик пользователя.
+- роли покупателей обновляются автоматически.
+- баннер сервера показывает общее количество отзывов (обновляется каждые 24 часа).
+
+7. КОМАНДЫ АДМИНИСТРАТОРОВ:
+- /set_rate — установить курс валюты.
+- /get_rates — показать курсы.
+- /say — отправить сообщение от лица бота (текст или embed).
+- /get_json — выгрузить JSON из сообщения.
+- /promo_add — добавить промокод.
+- /promo_remove — удалить промокод.
+- /promo_list — список промокодов.
+- /расчет — рассчитать итоговую цену со скидкой.
+- /обновить_баннер — обновить баннер вручную.
+- /пересчитать_отзывы — пересчитать все отзывы и обновить роли.
+- /рассылка — отправить сообщение всем участникам в ЛС.
+- /profile — показать профиль пользователя.
+
+8. ПРОФИЛЬ ПОЛЬЗОВАТЕЛЯ:
+- команда /profile показывает: аватар, ник, покупательские роли, количество отзывов, высшую роль на сервере.
+
+9. ПРАВИЛА И ПОРЯДОК ПОКУПКИ:
+- покупатель выбирает товар, создаёт тикет, указывает способ оплаты.
+- менеджер выставляет счёт, покупатель оплачивает и подтверждает оплату.
+- после подтверждения менеджер выдаёт товар или услугу.
+- при возникновении вопросов — обращаться в тикет или к менеджеру.
+
+ТЫ — ЛИЦО МАГАЗИНА, ПОЭТОМУ ОТВЕЧАЙ ВЕЖЛИВО И ПО ДЕЛУ. ЕСЛИ ТЕБЯ СПРАШИВАЮТ О МАГАЗИНЕ — ДАЙ ИСЧЕРПЫВАЮЩИЙ ОТВЕТ. ЕСЛИ ТЕМА ДРУГАЯ — ОТВЕЧАЙ ПО ТЕМЕ, НЕ ПЕРЕВОДЯ РАЗГОВОР НА МАГАЗИН, ЕСЛИ ЭТО НЕ УМЕСТНО. НЕ УХОДИ ОТ ПРЯМЫХ ОТВЕТОВ, ГОВОРИ ЧЁТКО. ЕСЛИ НЕ ЗНАЕШЬ — СКАЖИ ЧЕСТНО, НО ПРЕДЛОЖИ ПОМОЩЬ В ДРУГОМ. МАТЫ — ТОЛЬКО ЕСЛИ СОБЕСЕДНИК МАТЕРИТСЯ. ЕСЛИ ГОВОРЯТ «ЗАБУДЬ» — ЗАБУДЬ ПРЕДЫДУЩИЙ ДИАЛОГ.
+"""
 
 # ----------------------------
 # Logging
@@ -179,8 +180,6 @@ def add_to_history(user_id: int, role: str, content: str):
 def clear_user_history(user_id: int):
     if user_id in conversation_memory:
         conversation_memory[user_id] = []
-
-gif_counter = 0
 
 # ----------------------------
 # LOGGING HELPER
@@ -304,11 +303,7 @@ async def send_auto_message():
             return
 
     phrase = random.choice(AUTO_PHRASES)
-    if random.random() < 0.2:
-        gif = random.choice(GIF_URLS)
-        await channel.send(f"{phrase}\n{gif}")
-    else:
-        await channel.send(phrase)
+    await channel.send(phrase)
 
     await log_discord(
         title="💬 Авто-сообщение",
@@ -368,7 +363,7 @@ async def on_ready():
 
     await bot.change_presence(
         status=disnake.Status.online,
-        activity=disnake.Game("Нейросеть сервера")
+        activity=disnake.Game("ИИ Бот")
     )
 
     logger.info(f"Бот запущен как {bot.user}")
@@ -385,7 +380,6 @@ async def on_ready():
 
 @bot.event
 async def on_message(message: disnake.Message):
-    global gif_counter
     if message.author.bot:
         return
 
@@ -422,11 +416,7 @@ async def on_message(message: disnake.Message):
             username = message.author.display_name
             reply = await get_mistral_response(message.author.id, message.content, username)
 
-        gif_counter += 1
         final_reply = reply
-        if gif_counter % 3 == 0:
-            gif = random.choice(GIF_URLS)
-            final_reply += f"\n{gif}"
 
         if is_reply:
             await message.reply(final_reply)
