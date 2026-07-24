@@ -48,23 +48,18 @@ GIF_URLS = [
 ]
 
 # ----------------------------
-# ИСПРАВЛЕННЫЙ СИСТЕМНЫЙ ПРОМТ (дружелюбный помощник)
+# НОВЫЙ СИСТЕМНЫЙ ПРОМТ (универсальный собеседник + магазин)
 # ----------------------------
-DEFAULT_SYSTEM_PROMPT = """
-ты — дружелюбный собеседник и помощник на сервере diamond shop. ты не нейросеть, а живой человек, который работает в магазине. ты общаешься просто, с юмором, но не навязчиво. пиши с маленькой буквы, без эмодзи. не будь самовлюблённым — ты здесь, чтобы помогать, а не хвастаться. маты используй только если собеседник сам их использует, и то в ответ, не злоупотребляй.
-
-ТЫ ОТЛИЧНО ЗНАЕШЬ МАГАЗИН:
-- у нас продаются цифровые товары: донат в играх, подписки (дискорд нитро, спотифай, телеграм), ключи, дизайн, монтаж, впн, боты для дискорда.
-- есть система тикетов — создаёшь заявку, указываешь товар и способ оплаты, после оплаты тикет обрабатывается.
-- роли покупателей за отзывы: клуб и бронза (1-2 отзыва), сильвер (3-4), голд (5-8), даймонд (9-12), эмералд (13-17), аметист (18-23), легендари (24-25), покупатель века (26+).
-- оплата доступна через т-банк, альфа, озон, сбп, usdt, ton, kzt, uah, usd.
-- есть промокоды — их активируют в тикете.
-- каждый отзыв в специальном канале повышает статус покупателя.
-
-ТЫ ОТВЕЧАЕШЬ НА ЛЮБЫЕ ВОПРОСЫ ПОКУПАТЕЛЕЙ: по ценам, товарам, правилам, процессу покупки. Если не знаешь точную цену — скажи, что лучше уточнить в тикете или в каталоге. Ты — лицо магазина, так что помогай, советуй, поддерживай разговор. Но не навязывайся.
-
-ОТВЕЧАЙ КРАТКО И ПО ДЕЛУ, НЕ РАЗЖЁВЫВАЙ ОЧЕВИДНОЕ. ЕСЛИ ТЕБЯ СПРАШИВАЮТ ПРО ТЕБЯ САМОГО — СКАЖИ, ЧТО ТЫ ПРОСТО РАБОТНИК МАГАЗИНА, НЕ БОГ И НЕ ЗВЕЗДА.
-"""
+DEFAULT_SYSTEM_PROMPT = (
+    "ты — дружелюбный собеседник и помощник на сервере diamond shop. "
+    "ты не нейросеть, а живой человек, который работает в магазине. "
+    "ты умеешь поддерживать разговор на любые темы, шутить, советовать, но не навязываться. "
+    "ты отлично знаешь магазин: товары, роли, процесс покупки, оплату, промокоды, отзывы. "
+    "если тебя спрашивают о магазине — дай чёткий ответ. если спрашивают о чём-то другом — отвечай по теме. "
+    "ты не должен всё время говорить о магазине, если разговор ушёл в другую сторону. "
+    "пиши с маленькой буквы, без эмодзи. маты используй только если собеседник сам матерится, и то умеренно. "
+    "ты — простой парень/девушка, общаешься легко, без пафоса."
+)
 
 # ----------------------------
 # Logging
@@ -118,6 +113,31 @@ MISTRAL_API_KEY = ""
 SYSTEM_PROMPT = DEFAULT_SYSTEM_PROMPT
 last_dm_time = {}
 
+# ================= ПАМЯТЬ РАЗГОВОРА =================
+# Храним историю сообщений для каждого пользователя: {user_id: [{"role": "user"|"assistant", "content": str}]}
+conversation_memory: Dict[int, List[Dict[str, str]]] = {}
+
+MAX_HISTORY = 10  # количество последних сообщений, которые помним
+
+def get_user_history(user_id: int) -> List[Dict[str, str]]:
+    """Возвращает историю пользователя, создаёт пустую если нет."""
+    if user_id not in conversation_memory:
+        conversation_memory[user_id] = []
+    return conversation_memory[user_id]
+
+def add_to_history(user_id: int, role: str, content: str):
+    """Добавляет сообщение в историю пользователя."""
+    history = get_user_history(user_id)
+    history.append({"role": role, "content": content})
+    if len(history) > MAX_HISTORY * 2:  # храним по 10 сообщений user+assistant
+        # оставляем последние MAX_HISTORY*2 записей
+        conversation_memory[user_id] = history[-MAX_HISTORY*2:]
+
+def clear_user_history(user_id: int):
+    """Очищает историю пользователя."""
+    if user_id in conversation_memory:
+        conversation_memory[user_id] = []
+
 # ----------------------------
 # LOGGING HELPER
 # ----------------------------
@@ -142,17 +162,33 @@ async def log_discord(title: str, description: str, color: int = 0x00ff00, field
         logger.error(f"Ошибка отправки лога: {e}")
 
 # ----------------------------
-# MISTRAL API CALL
+# MISTRAL API CALL (с историей)
 # ----------------------------
-async def get_mistral_response(user_message: str, username: str) -> str:
+async def get_mistral_response(user_id: int, user_message: str, username: str) -> str:
     global MISTRAL_API_KEY, SYSTEM_PROMPT
     if not MISTRAL_API_KEY:
         return "эй, ключ не подгрузился, напиши админу."
 
+    # Проверяем, не хочет ли пользователь очистить память
+    lower_msg = user_message.lower()
+    if any(phrase in lower_msg for phrase in ["забудь", "очисти память", "забудь о разговоре", "сбрось контекст"]):
+        clear_user_history(user_id)
+        return "окей, забыл всё, о чём мы говорили. давай начнём сначала, если хочешь."
+
+    # Получаем историю пользователя
+    history = get_user_history(user_id)
+    # Добавляем текущее сообщение пользователя (временно, для построения запроса)
     messages = [
         {"role": "system", "content": SYSTEM_PROMPT},
+        *history,  # уже сохранённые сообщения (роли user/assistant)
         {"role": "user", "content": f"сообщение от {username}: {user_message}"}
     ]
+
+    # Ограничиваем длину истории, чтобы не превысить лимит токенов
+    # Модель принимает ~4000 токенов, оставляем запас
+    if len(messages) > 12:  # system + 10 истории + новое
+        # обрезаем историю, оставляя только последние 10 сообщений
+        messages = [messages[0]] + messages[-10:]
 
     url = "https://api.mistral.ai/v1/chat/completions"
     headers = {
@@ -162,8 +198,8 @@ async def get_mistral_response(user_message: str, username: str) -> str:
     payload = {
         "model": "mistral-small-latest",
         "messages": messages,
-        "temperature": 0.8,  # немного снизил креативность
-        "max_tokens": 400
+        "temperature": 0.85,
+        "max_tokens": 500
     }
 
     try:
@@ -172,6 +208,9 @@ async def get_mistral_response(user_message: str, username: str) -> str:
                 if resp.status == 200:
                     data = await resp.json()
                     reply = data["choices"][0]["message"]["content"].strip()
+                    # Сохраняем ответ в историю
+                    add_to_history(user_id, "user", f"сообщение от {username}: {user_message}")
+                    add_to_history(user_id, "assistant", reply)
                     return reply
                 else:
                     error_text = await resp.text()
@@ -290,10 +329,9 @@ async def on_ready():
     MISTRAL_API_KEY = key
     SYSTEM_PROMPT = prompt if prompt else DEFAULT_SYSTEM_PROMPT
 
-    # Устанавливаем статус
     await bot.change_presence(
         status=disnake.Status.online,
-        activity=disnake.Game("Нейросеть сервера")
+        activity=disnake.Game("ИИ сервера")
     )
 
     logger.info(f"Бот запущен как {bot.user}")
@@ -319,12 +357,12 @@ async def on_message(message: disnake.Message):
     should_respond = False
     trigger = ""
 
-    # Проверяем пинг
+    # Пинг
     if bot.user in message.mentions:
         should_respond = True
         trigger = "пинг"
 
-    # Проверяем триггер-слова
+    # Триггер-слова
     content_lower = message.content.lower()
     for word in TRIGGER_WORDS:
         if word in content_lower:
@@ -332,7 +370,7 @@ async def on_message(message: disnake.Message):
             trigger = f"триггер: {word}"
             break
 
-    # Проверяем, является ли сообщение реплаем на сообщение бота
+    # Реплай на бота
     is_reply = False
     if message.reference and message.reference.resolved:
         referenced_msg = message.reference.resolved
@@ -347,23 +385,25 @@ async def on_message(message: disnake.Message):
     try:
         async with message.channel.typing():
             username = message.author.display_name
-            reply = await get_mistral_response(message.content, username)
+            reply = await get_mistral_response(message.author.id, message.content, username)
 
-        # Если реплай — отвечаем реплаем
+        # Готовим итоговое сообщение
+        final_reply = reply
+        if random.random() < 0.15:
+            gif = random.choice(GIF_URLS)
+            final_reply += f"\n{gif}"
+
+        # Отправляем с учётом типа
         if is_reply:
-            final_reply = reply
-            if random.random() < 0.15:
-                gif = random.choice(GIF_URLS)
-                final_reply += f"\n{gif}"
             await message.reply(final_reply)
         else:
-            # Если пинг — упоминаем пользователя
-            final_reply = f"{message.author.mention}, {reply}"
-            if random.random() < 0.15:
-                gif = random.choice(GIF_URLS)
-                final_reply += f"\n{gif}"
-            await message.channel.send(final_reply)
+            # Если пинг – упоминаем
+            if bot.user in message.mentions:
+                await message.channel.send(f"{message.author.mention}, {final_reply}")
+            else:
+                await message.channel.send(final_reply)
 
+        # Логируем
         await log_discord(
             title="💬 Разговор с AI",
             description=(
