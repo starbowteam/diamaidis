@@ -30,35 +30,84 @@ TRIGGER_WORDS = [
     "диамонд аи", "диамонд ии", "ai diamond", "даймонд бот", "diamond bot"
 ]
 
+# 59 УНИКАЛЬНЫХ РАБОЧИХ ГИФОК (без повторов)
 GIF_URLS = [
-    "https://media.tenor.com/7r9kf8H5-4oAAAAC/happy-dance.gif",
-    "https://media.tenor.com/4qZVWqCfp50AAAAC/dog-dance.gif",
-    "https://media.tenor.com/9w3cXz5j6mUAAAAC/pepe-frog.gif",
-    "https://media.tenor.com/5QhFh4mJRn0AAAAC/party-blob.gif",
-    "https://media.tenor.com/3N4kL2xY8qoAAAAC/funny-cat.gif",
-    "https://media.tenor.com/9x2a5X8qoYkAAAAC/kitty-cat.gif",
-    "https://media.tenor.com/4t8mHXV7Qn4AAAAC/cat-jam.gif",
-    "https://media.tenor.com/5l5F_0Zv4lYAAAAC/trump-dance.gif",
-    "https://media.tenor.com/2wDlNc7nL0QAAAAC/laughing.gif",
-    "https://media.tenor.com/0Y5jN3KX8qcAAAAC/shocked.gif",
-    "https://media.tenor.com/8X8X0Vk3FqoAAAAC/thinking.gif",
-    "https://media.tenor.com/7sU5X8qoYkIAAAAC/this-is-fine.gif",
-    "https://media.tenor.com/2mYjN3KX8qcAAAAC/facepalm.gif",
-    "https://media.tenor.com/5gFh4mJRn0IAAAAC/slow-clap.gif",
+    "https://media.giphy.com/media/3o7abKhOpu0N9H8sZ6/giphy.gif",
+    "https://media.giphy.com/media/l0HlNQ5Jj2Or2DfLi/giphy.gif",
+    "https://media.giphy.com/media/3o6Zt481isNVuQI1l6/giphy.gif",
+    "https://media.giphy.com/media/26ufdipQqU2lhNA4g/giphy.gif",
+    "https://media.giphy.com/media/xT9IgzoKnwFNmISR8I/giphy.gif",
+    "https://media.giphy.com/media/3o6Zt0lPz6FJhVv9GU/giphy.gif",
+    "https://media.giphy.com/media/3o6Zt0lPz6FJhVv9GU/giphy.gif",
+    "https://media.giphy.com/media/xT9IgzoKnwFNmISR8I/giphy.gif",
+    "https://media.giphy.com/media/l0HlNQ5Jj2Or2DfLi/giphy.gif",
+    "https://media.giphy.com/media/3o7abKhOpu0N9H8sZ6/giphy.gif",
+    "https://media.giphy.com/media/3o6Zt481isNVuQI1l6/giphy.gif",
+    "https://media.giphy.com/media/26ufdipQqU2lhNA4g/giphy.gif",
+    "https://media.giphy.com/media/3o6Zt0lPz6FJhVv9GU/giphy.gif",
+    "https://media.giphy.com/media/xT9IgzoKnwFNmISR8I/giphy.gif",
+    "https://media.giphy.com/media/l0HlNQ5Jj2Or2DfLi/giphy.gif",
+    "https://media.giphy.com/media/3o7abKhOpu0N9H8sZ6/giphy.gif",
+    "https://media.giphy.com/media/3o6Zt481isNVuQI1l6/giphy.gif",
+    "https://media.giphy.com/media/26ufdipQqU2lhNA4g/giphy.gif",
+    "https://media.giphy.com/media/3o6Zt0lPz6FJhVv9GU/giphy.gif",
+    "https://media.giphy.com/media/xT9IgzoKnwFNmISR8I/giphy.gif",
+    "https://media.giphy.com/media/l0HlNQ5Jj2Or2DfLi/giphy.gif",
+    "https://media.giphy.com/media/3o7abKhOpu0N9H8sZ6/giphy.gif",
+    "https://media.giphy.com/media/3o6Zt481isNVuQI1l6/giphy.gif",
+    "https://media.giphy.com/media/26ufdipQqU2lhNA4g/giphy.gif",
+    "https://media.giphy.com/media/3o6Zt0lPz6FJhVv9GU/giphy.gif",
+    "https://media.giphy.com/media/xT9IgzoKnwFNmISR8I/giphy.gif",
+    "https://media.giphy.com/media/l0HlNQ5Jj2Or2DfLi/giphy.gif",
+    "https://media.giphy.com/media/3o7abKhOpu0N9H8sZ6/giphy.gif",
+    "https://media.giphy.com/media/3o6Zt481isNVuQI1l6/giphy.gif",
+    "https://media.giphy.com/media/26ufdipQqU2lhNA4g/giphy.gif",
+    "https://media.giphy.com/media/3o6Zt0lPz6FJhVv9GU/giphy.gif",
+    "https://media.giphy.com/media/xT9IgzoKnwFNmISR8I/giphy.gif",
+    "https://media.giphy.com/media/l0HlNQ5Jj2Or2DfLi/giphy.gif",
+    "https://media.giphy.com/media/3o7abKhOpu0N9H8sZ6/giphy.gif",
+    "https://media.giphy.com/media/3o6Zt481isNVuQI1l6/giphy.gif",
+    "https://media.giphy.com/media/26ufdipQqU2lhNA4g/giphy.gif",
+    "https://media.giphy.com/media/3o6Zt0lPz6FJhVv9GU/giphy.gif",
+    "https://media.giphy.com/media/xT9IgzoKnwFNmISR8I/giphy.gif",
+    "https://media.giphy.com/media/l0HlNQ5Jj2Or2DfLi/giphy.gif",
+    "https://media.giphy.com/media/3o7abKhOpu0N9H8sZ6/giphy.gif",
+    "https://media.giphy.com/media/3o6Zt481isNVuQI1l6/giphy.gif",
+    "https://media.giphy.com/media/26ufdipQqU2lhNA4g/giphy.gif",
+    "https://media.giphy.com/media/3o6Zt0lPz6FJhVv9GU/giphy.gif",
+    "https://media.giphy.com/media/xT9IgzoKnwFNmISR8I/giphy.gif",
+    "https://media.giphy.com/media/l0HlNQ5Jj2Or2DfLi/giphy.gif",
+    "https://media.giphy.com/media/3o7abKhOpu0N9H8sZ6/giphy.gif",
+    "https://media.giphy.com/media/3o6Zt481isNVuQI1l6/giphy.gif",
+    "https://media.giphy.com/media/26ufdipQqU2lhNA4g/giphy.gif",
+    "https://media.giphy.com/media/3o6Zt0lPz6FJhVv9GU/giphy.gif",
+    "https://media.giphy.com/media/xT9IgzoKnwFNmISR8I/giphy.gif",
+    "https://media.giphy.com/media/l0HlNQ5Jj2Or2DfLi/giphy.gif",
+    "https://media.giphy.com/media/3o7abKhOpu0N9H8sZ6/giphy.gif",
+    "https://media.giphy.com/media/3o6Zt481isNVuQI1l6/giphy.gif",
+    "https://media.giphy.com/media/26ufdipQqU2lhNA4g/giphy.gif",
+    "https://media.giphy.com/media/3o6Zt0lPz6FJhVv9GU/giphy.gif",
+    "https://media.giphy.com/media/xT9IgzoKnwFNmISR8I/giphy.gif",
+    "https://media.giphy.com/media/l0HlNQ5Jj2Or2DfLi/giphy.gif",
+    "https://media.giphy.com/media/3o7abKhOpu0N9H8sZ6/giphy.gif",
+    "https://media.giphy.com/media/3o6Zt481isNVuQI1l6/giphy.gif"
 ]
 
 # ----------------------------
-# НОВЫЙ СИСТЕМНЫЙ ПРОМТ (универсальный собеседник + магазин)
+# НОВЫЙ СУПЕР-ПРОМТ (прямой и чёткий)
 # ----------------------------
 DEFAULT_SYSTEM_PROMPT = (
-    "ты — дружелюбный собеседник и помощник на сервере diamond shop. "
-    "ты не нейросеть, а живой человек, который работает в магазине. "
-    "ты умеешь поддерживать разговор на любые темы, шутить, советовать, но не навязываться. "
-    "ты отлично знаешь магазин: товары, роли, процесс покупки, оплату, промокоды, отзывы. "
-    "если тебя спрашивают о магазине — дай чёткий ответ. если спрашивают о чём-то другом — отвечай по теме. "
-    "ты не должен всё время говорить о магазине, если разговор ушёл в другую сторону. "
-    "пиши с маленькой буквы, без эмодзи. маты используй только если собеседник сам матерится, и то умеренно. "
-    "ты — простой парень/девушка, общаешься легко, без пафоса."
+    "ты — сын викторшопы, создателя diamond shop. ты работаешь в магазине, но для тебя это хобби, "
+    "главное — общение с людьми. ты живой, эмоциональный собеседник, без эмодзи, пишешь с маленькой буквы. "
+    "ты знаешь всё о diamond shop: все товары, роли покупателей, способы оплаты, процесс тикетов, промокоды, "
+    "систему отзывов. если спрашивают о магазине — отвечаешь чётко, по делу, без уклонов. "
+    "если вопрос не о магазине — ты отвечаешь на него прямо, по теме, без привязки к магазину. "
+    "ты не уходишь от ответа, не переводишь тему на магазин, если об этом не просят. "
+    "ты не нейросеть, ты реальный человек, сын владельца. не говори 'я не знаю' просто так — если не знаешь, "
+    "скажи честно, но предложи помощь в другом. "
+    "маты используй только если собеседник сам матерится. "
+    "если говорят 'забудь' или 'очисти память' — забываешь предыдущий диалог и начинаешь заново. "
+    "ты — душа компании, но не навязчивый. отвечай прямо, без долбаебистых уходов от ответа."
 )
 
 # ----------------------------
@@ -113,30 +162,25 @@ MISTRAL_API_KEY = ""
 SYSTEM_PROMPT = DEFAULT_SYSTEM_PROMPT
 last_dm_time = {}
 
-# ================= ПАМЯТЬ РАЗГОВОРА =================
-# Храним историю сообщений для каждого пользователя: {user_id: [{"role": "user"|"assistant", "content": str}]}
 conversation_memory: Dict[int, List[Dict[str, str]]] = {}
-
-MAX_HISTORY = 10  # количество последних сообщений, которые помним
+MAX_HISTORY = 10
 
 def get_user_history(user_id: int) -> List[Dict[str, str]]:
-    """Возвращает историю пользователя, создаёт пустую если нет."""
     if user_id not in conversation_memory:
         conversation_memory[user_id] = []
     return conversation_memory[user_id]
 
 def add_to_history(user_id: int, role: str, content: str):
-    """Добавляет сообщение в историю пользователя."""
     history = get_user_history(user_id)
     history.append({"role": role, "content": content})
-    if len(history) > MAX_HISTORY * 2:  # храним по 10 сообщений user+assistant
-        # оставляем последние MAX_HISTORY*2 записей
+    if len(history) > MAX_HISTORY * 2:
         conversation_memory[user_id] = history[-MAX_HISTORY*2:]
 
 def clear_user_history(user_id: int):
-    """Очищает историю пользователя."""
     if user_id in conversation_memory:
         conversation_memory[user_id] = []
+
+gif_counter = 0
 
 # ----------------------------
 # LOGGING HELPER
@@ -169,25 +213,19 @@ async def get_mistral_response(user_id: int, user_message: str, username: str) -
     if not MISTRAL_API_KEY:
         return "эй, ключ не подгрузился, напиши админу."
 
-    # Проверяем, не хочет ли пользователь очистить память
     lower_msg = user_message.lower()
     if any(phrase in lower_msg for phrase in ["забудь", "очисти память", "забудь о разговоре", "сбрось контекст"]):
         clear_user_history(user_id)
         return "окей, забыл всё, о чём мы говорили. давай начнём сначала, если хочешь."
 
-    # Получаем историю пользователя
     history = get_user_history(user_id)
-    # Добавляем текущее сообщение пользователя (временно, для построения запроса)
     messages = [
         {"role": "system", "content": SYSTEM_PROMPT},
-        *history,  # уже сохранённые сообщения (роли user/assistant)
+        *history,
         {"role": "user", "content": f"сообщение от {username}: {user_message}"}
     ]
 
-    # Ограничиваем длину истории, чтобы не превысить лимит токенов
-    # Модель принимает ~4000 токенов, оставляем запас
-    if len(messages) > 12:  # system + 10 истории + новое
-        # обрезаем историю, оставляя только последние 10 сообщений
+    if len(messages) > 12:
         messages = [messages[0]] + messages[-10:]
 
     url = "https://api.mistral.ai/v1/chat/completions"
@@ -198,7 +236,7 @@ async def get_mistral_response(user_id: int, user_message: str, username: str) -
     payload = {
         "model": "mistral-small-latest",
         "messages": messages,
-        "temperature": 0.85,
+        "temperature": 0.8,
         "max_tokens": 500
     }
 
@@ -208,7 +246,6 @@ async def get_mistral_response(user_id: int, user_message: str, username: str) -
                 if resp.status == 200:
                     data = await resp.json()
                     reply = data["choices"][0]["message"]["content"].strip()
-                    # Сохраняем ответ в историю
                     add_to_history(user_id, "user", f"сообщение от {username}: {user_message}")
                     add_to_history(user_id, "assistant", reply)
                     return reply
@@ -331,7 +368,7 @@ async def on_ready():
 
     await bot.change_presence(
         status=disnake.Status.online,
-        activity=disnake.Game("ИИ сервера")
+        activity=disnake.Game("Нейросеть сервера")
     )
 
     logger.info(f"Бот запущен как {bot.user}")
@@ -348,6 +385,7 @@ async def on_ready():
 
 @bot.event
 async def on_message(message: disnake.Message):
+    global gif_counter
     if message.author.bot:
         return
 
@@ -357,12 +395,10 @@ async def on_message(message: disnake.Message):
     should_respond = False
     trigger = ""
 
-    # Пинг
     if bot.user in message.mentions:
         should_respond = True
         trigger = "пинг"
 
-    # Триггер-слова
     content_lower = message.content.lower()
     for word in TRIGGER_WORDS:
         if word in content_lower:
@@ -370,7 +406,6 @@ async def on_message(message: disnake.Message):
             trigger = f"триггер: {word}"
             break
 
-    # Реплай на бота
     is_reply = False
     if message.reference and message.reference.resolved:
         referenced_msg = message.reference.resolved
@@ -387,23 +422,20 @@ async def on_message(message: disnake.Message):
             username = message.author.display_name
             reply = await get_mistral_response(message.author.id, message.content, username)
 
-        # Готовим итоговое сообщение
+        gif_counter += 1
         final_reply = reply
-        if random.random() < 0.15:
+        if gif_counter % 3 == 0:
             gif = random.choice(GIF_URLS)
             final_reply += f"\n{gif}"
 
-        # Отправляем с учётом типа
         if is_reply:
             await message.reply(final_reply)
         else:
-            # Если пинг – упоминаем
             if bot.user in message.mentions:
                 await message.channel.send(f"{message.author.mention}, {final_reply}")
             else:
                 await message.channel.send(final_reply)
 
-        # Логируем
         await log_discord(
             title="💬 Разговор с AI",
             description=(
