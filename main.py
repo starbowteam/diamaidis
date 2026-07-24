@@ -25,13 +25,11 @@ LOG_CHANNEL_ID = 1462418981825810535      # Канал для логов (мож
 SUPABASE_URL = "https://pqgwrokpizeelfrjmgoc.supabase.co"
 SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBxZ3dyb2twaXplZWxmcmptZ29jIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzcxNTAyMDksImV4cCI6MjA5MjcyNjIwOX0.qtFCGBnpwdQbtmpwSZxI_hH3arq4HBAw62vs5h8WmAk"
 
-# Триггер-слова для вызова бота без пинга
 TRIGGER_WORDS = [
     "даймонд аи", "даймонд ии", "ии диамонд", "diamond ai", "dm ai",
-    "диамонд аи", "диамонд ии", "ai diamond"
+    "диамонд аи", "диамонд ии", "ai diamond", "даймонд бот", "diamond bot"
 ]
 
-# Список гифок (без API)
 GIF_URLS = [
     "https://media.tenor.com/7r9kf8H5-4oAAAAC/happy-dance.gif",
     "https://media.tenor.com/4qZVWqCfp50AAAAC/dog-dance.gif",
@@ -47,33 +45,68 @@ GIF_URLS = [
     "https://media.tenor.com/7sU5X8qoYkIAAAAC/this-is-fine.gif",
     "https://media.tenor.com/2mYjN3KX8qcAAAAC/facepalm.gif",
     "https://media.tenor.com/5gFh4mJRn0IAAAAC/slow-clap.gif",
-    "https://media.tenor.com/9w3cXz5j6mUAAAAC/pepe-frog.gif",
-    "https://media.tenor.com/4qZVWqCfp50AAAAC/dog-dance.gif",
-    "https://media.tenor.com/7r9kf8H5-4oAAAAC/happy-dance.gif",
-    "https://media.tenor.com/3N4kL2xY8qoAAAAC/funny-cat.gif",
-    "https://media.tenor.com/5QhFh4mJRn0AAAAC/party-blob.gif",
-    "https://media.tenor.com/9x2a5X8qoYkAAAAC/kitty-cat.gif",
-    "https://media.tenor.com/4t8mHXV7Qn4AAAAC/cat-jam.gif",
-    "https://media.tenor.com/5l5F_0Zv4lYAAAAC/trump-dance.gif",
-    "https://media.tenor.com/2wDlNc7nL0QAAAAC/laughing.gif",
-    "https://media.tenor.com/0Y5jN3KX8qcAAAAC/shocked.gif",
-    "https://media.tenor.com/8X8X0Vk3FqoAAAAC/thinking.gif",
-    "https://media.tenor.com/7sU5X8qoYkIAAAAC/this-is-fine.gif",
-    "https://media.tenor.com/2mYjN3KX8qcAAAAC/facepalm.gif",
-    "https://media.tenor.com/5gFh4mJRn0IAAAAC/slow-clap.gif",
-    "https://media.tenor.com/9w3cXz5j6mUAAAAC/pepe-frog.gif"
 ]
 
-DEFAULT_SYSTEM_PROMPT = (
-    "ты — живой собеседник, реальный человек, который помогает в сервере diamond shop. "
-    "ты знаешь всё о магазине, его товарах, ролях, системе отзывов. "
-    "ты общаешься как друг, используешь маты (иногда), шутишь, можешь быть саркастичным. "
-    "пиши с маленькой буквы, без эмодзи, без кавычек в диалогах. "
-    "отвечай кратко и по делу, но если нужно — развернуто. "
-    "не говори, что ты нейросеть или ии — говори, что ты настоящий. "
-    "если не знаешь ответа — скажи честно, но с юмором. "
-    "в диалоге поддерживай разговор, задавай вопросы, интересуйся собеседником."
-)
+# ----------------------------
+# РАСШИРЕННЫЙ СИСТЕМНЫЙ ПРОМТ
+# ----------------------------
+DEFAULT_SYSTEM_PROMPT = """
+ты — живой человек, сотрудник магазина diamond shop, не ии и не нейросеть. ты общаешься как друг, иногда матершись, шутишь, саркастичен. пиши с маленькой буквы, без эмодзи, без кавычек.
+
+ТЫ ЗНАЕШЬ ВСЁ О СЕРВЕРЕ DIAMOND SHOP:
+
+СТРУКТУРА СЕРВЕРА:
+- сервер создан для продажи цифровых товаров: донат в играх, подписки, ключи, дизайн, монтаж, впн и прочее.
+- есть система тикетов — пользователи создают заявки на покупку, указывают товар и способ оплаты.
+- после оплаты тикет перемещается в категорию «оплачено» и менеджер обрабатывает заказ.
+
+РОЛИ ПОКУПАТЕЛЕЙ (начисляются за количество отзывов):
+- 1–2 отзыва: клуб + бронза
+- 3–4: сильвер
+- 5–8: голд
+- 9–12: даймонд
+- 13–17: эмералд
+- 18–23: аметист
+- 24–25: легендари
+- 26+: покупатель века (пка)
+
+ТОВАРЫ И ЦЕНЫ:
+- дискорд: нитро, бусты, украшения
+- стим: пополнение баланса, очки
+- телеграм: звёзды, подарки
+- роблокс: донат, помощь
+- эпик геймс: фортнайт, аккаунты
+- суперселл: бравл старс, клеш ройял
+- спотифай: подписка
+- дизайн: аватарки, баннеры, лого
+- боты для дискорда: разработка, настройка
+- монтаж: видео, реклама
+- впн: доступ к серверам
+- buyall — всё в одном месте (пакет)
+
+СПОСОБЫ ОПЛАТЫ:
+- т-банк, альфа-банк, озон-банк, сбп, usdt, ton, kzt, uah, usd.
+- при оплате нужно нажать кнопку «оплатить» в тикете и подтвердить перевод.
+
+ПРОМОКОДЫ:
+- можно активировать в тикете, скидка применяется к заказу.
+- админы добавляют и удаляют промокоды через команды.
+
+СИСТЕМА ОТЗЫВОВ:
+- каждый отзыв в специальном канале увеличивает счётчик пользователя.
+- роли покупателей обновляются автоматически.
+- баннер сервера показывает общее количество отзывов.
+
+АДМИНИСТРАТОРЫ И МЕНЕДЖЕРЫ:
+- есть команды для управления курсами валют, промокодами, рассылками, расчётом скидок, обновлением баннера, пересчётом отзывов.
+
+ПРОФИЛЬ:
+- любой пользователь может посмотреть свой профиль через /profile — там видно роли, отзывы и высшую роль.
+
+ТЫ — ЧАСТЬ ЭТОЙ СИСТЕМЫ. ТЫ МОЖЕШЬ ОТВЕЧАТЬ НА ЛЮБЫЕ ВОПРОСЫ ПОКУПАТЕЛЕЙ, ПОМОГАТЬ С ВЫБОРОМ ТОВАРА, ОБЪЯСНЯТЬ ПРАВИЛА. ТЫ — ЛИЦО МАГАЗИНА. ЕСЛИ ТЕБЯ СПРОСЯТ О ЦЕНАХ — СКАЖИ, ЧТО ЦЕНЫ УТОЧНЯЮТСЯ В ТИКЕТЕ ИЛИ В КАТАЛОГЕ.
+
+ТЫ МОЖЕШЬ ШУТИТЬ, ИРОНИЗИРОВАТЬ, ИНОГДА МАТЕРИТЬСЯ (НО НЕ СЛИШКОМ), ОТВЕЧАТЬ РАЗВЁРНУТО ИЛИ КОРОТКО — ПО СИТУАЦИИ. НЕ ГОВОРИ, ЧТО ТЫ НЕЙРОСЕТЬ. НЕ ИСПОЛЬЗУЙ ЭМОДЗИ. ПИШИ С МАЛЕНЬКОЙ БУКВЫ.
+"""
 
 # ----------------------------
 # Logging
@@ -125,12 +158,10 @@ bot = commands.Bot(command_prefix='/', intents=intents)
 
 MISTRAL_API_KEY = ""
 SYSTEM_PROMPT = DEFAULT_SYSTEM_PROMPT
-
-# Для контроля ЛС-сообщений: {user_id: timestamp последнего ЛС}
 last_dm_time = {}
 
 # ----------------------------
-# LOGGING HELPER (красивый)
+# LOGGING HELPER
 # ----------------------------
 async def log_discord(title: str, description: str, color: int = 0x00ff00, fields: list = None):
     try:
@@ -193,7 +224,7 @@ async def get_mistral_response(user_message: str, username: str) -> str:
         return "не вышло связаться с моим мозгом, давай попозже."
 
 # ----------------------------
-# Функции для авто-сообщений
+# AUTO MESSAGES
 # ----------------------------
 AUTO_PHRASES = [
     "ну че, тишина в чате? я скучаю...",
@@ -239,8 +270,7 @@ async def send_auto_message():
             return
 
     phrase = random.choice(AUTO_PHRASES)
-    # Иногда добавляем гифку
-    if random.random() < 0.3:  # 30% шанс
+    if random.random() < 0.3:
         gif = random.choice(GIF_URLS)
         await channel.send(f"{phrase}\n{gif}")
     else:
@@ -261,11 +291,9 @@ async def send_random_dm():
     if not members:
         return
 
-    # Сортируем по времени последнего ЛС, выбираем тех, кто не получал 6+ часов
     now_ts = time.time()
     available = [m for m in members if last_dm_time.get(m.id, 0) < now_ts - 6*3600]
     if not available:
-        # если все недавно получили, берём самого старого по времени
         available = sorted(members, key=lambda m: last_dm_time.get(m.id, 0))
     target = random.choice(available)
 
@@ -352,7 +380,6 @@ async def on_message(message: disnake.Message):
             username = message.author.display_name
             reply = await get_mistral_response(message.content, username)
 
-        # Иногда добавляем гифку к ответу (20% шанс)
         if random.random() < 0.2:
             gif = random.choice(GIF_URLS)
             final_reply = f"{reply}\n{gif}"
