@@ -21,7 +21,7 @@ if not BOT_TOKEN:
     exit(1)
 
 ALLOWED_CHANNEL_ID = 1462064375862005845
-LOG_CHANNEL_ID = 1462418981825810535
+LOG_CHANNEL_ID = 1530453871581855744  # новый канал логов
 SUPABASE_URL = "https://pqgwrokpizeelfrjmgoc.supabase.co"
 SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBxZ3dyb2twaXplZWxmcmptZ29jIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzcxNTAyMDksImV4cCI6MjA5MjcyNjIwOX0.qtFCGBnpwdQbtmpwSZxI_hH3arq4HBAw62vs5h8WmAk"
 
@@ -257,7 +257,7 @@ async def get_mistral_response(user_id: int, user_message: str, username: str) -
         return "не вышло связаться с моим мозгом, давай попозже."
 
 # ----------------------------
-# AUTO MESSAGES
+# AUTO MESSAGES (интервал 2 часа)
 # ----------------------------
 AUTO_PHRASES = [
     "ну че, тишина в чате? может, обсудим что-нибудь?",
@@ -290,23 +290,20 @@ async def send_auto_message():
     if not channel:
         logger.warning("Канал для общения не найден")
         return
-
     last_user_msg_time = None
     async for msg in channel.history(limit=20):
         if not msg.author.bot:
             last_user_msg_time = msg.created_at
             break
-
     if last_user_msg_time:
         seconds_since = (datetime.now(timezone.utc) - last_user_msg_time).total_seconds()
-        if seconds_since < 600:
+        # 2 часа = 7200 секунд
+        if seconds_since < 7200:
             return
-
     phrase = random.choice(AUTO_PHRASES)
     await channel.send(phrase)
-
     await log_discord(
-        title="💬 Авто-сообщение",
+        title="💬 Авто-сообщение (AI)",
         description=f"> **Сообщение:** {phrase}",
         color=0x00aaff
     )
@@ -319,19 +316,17 @@ async def send_random_dm():
     members = [m for m in guild.members if not m.bot and m.id != bot.user.id]
     if not members:
         return
-
     now_ts = time.time()
     available = [m for m in members if last_dm_time.get(m.id, 0) < now_ts - 6*3600]
     if not available:
         available = sorted(members, key=lambda m: last_dm_time.get(m.id, 0))
     target = random.choice(available)
-
     phrase = random.choice(DM_PHRASES)
     try:
         await target.send(phrase)
         last_dm_time[target.id] = now_ts
         await log_discord(
-            title="💌 ЛС-сообщение",
+            title="💌 ЛС-сообщение (AI)",
             description=f"> **Получатель:** {target.mention}\n> **Сообщение:** {phrase}",
             color=0xffaa00
         )
@@ -339,14 +334,14 @@ async def send_random_dm():
         logger.error(f"Не удалось отправить ЛС {target}: {e}")
 
 # ----------------------------
-# TASKS
+# TASKS (интервал 2 часа для авто-сообщений)
 # ----------------------------
-@tasks.loop(minutes=10)
+@tasks.loop(minutes=120)  # каждые 2 часа
 async def auto_message_task():
     await bot.wait_until_ready()
     await send_auto_message()
 
-@tasks.loop(minutes=10)
+@tasks.loop(minutes=10)  # ЛС-сообщения оставляем 10 минут
 async def dm_task():
     await bot.wait_until_ready()
     await send_random_dm()
@@ -363,7 +358,7 @@ async def on_ready():
 
     await bot.change_presence(
         status=disnake.Status.online,
-        activity=disnake.Game("ИИ Бот")
+        activity=disnake.Game("Нейросеть сервера")
     )
 
     logger.info(f"Бот запущен как {bot.user}")
@@ -382,24 +377,19 @@ async def on_ready():
 async def on_message(message: disnake.Message):
     if message.author.bot:
         return
-
     if message.channel.id != ALLOWED_CHANNEL_ID:
         return
-
     should_respond = False
     trigger = ""
-
     if bot.user in message.mentions:
         should_respond = True
         trigger = "пинг"
-
     content_lower = message.content.lower()
     for word in TRIGGER_WORDS:
         if word in content_lower:
             should_respond = True
             trigger = f"триггер: {word}"
             break
-
     is_reply = False
     if message.reference and message.reference.resolved:
         referenced_msg = message.reference.resolved
@@ -407,17 +397,13 @@ async def on_message(message: disnake.Message):
             should_respond = True
             trigger = "реплай"
             is_reply = True
-
     if not should_respond:
         return
-
     try:
         async with message.channel.typing():
             username = message.author.display_name
             reply = await get_mistral_response(message.author.id, message.content, username)
-
         final_reply = reply
-
         if is_reply:
             await message.reply(final_reply)
         else:
@@ -425,7 +411,6 @@ async def on_message(message: disnake.Message):
                 await message.channel.send(f"{message.author.mention}, {final_reply}")
             else:
                 await message.channel.send(final_reply)
-
         await log_discord(
             title="💬 Разговор с AI",
             description=(
@@ -436,7 +421,6 @@ async def on_message(message: disnake.Message):
             ),
             color=0xffff00
         )
-
     except Exception as e:
         logger.exception(f"Ошибка обработки сообщения: {e}")
         await message.channel.send("ой, я завис, давай ещё раз.")
