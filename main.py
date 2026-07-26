@@ -5,7 +5,7 @@ import logging
 import json
 import random
 import time
-from datetime import datetime, timezone
+from datetime import datetime, timezone, timedelta
 from typing import Optional, Dict, Any, List
 import aiohttp
 from supabase import create_client, Client
@@ -20,8 +20,8 @@ if not BOT_TOKEN:
     print("❌ Ошибка: переменная окружения BOT_TOKEN не установлена.")
     exit(1)
 
-ALLOWED_CHANNEL_ID = 1462064375862005845
-LOG_CHANNEL_ID = 1530453871581855744  # новый канал логов
+ALLOWED_CHANNEL_ID = 1462064375862005845  # Канал для обычного общения
+LOG_CHANNEL_ID = 1530453871581855744
 SUPABASE_URL = "https://pqgwrokpizeelfrjmgoc.supabase.co"
 SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBxZ3dyb2twaXplZWxmcmptZ29jIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzcxNTAyMDksImV4cCI6MjA5MjcyNjIwOX0.qtFCGBnpwdQbtmpwSZxI_hH3arq4HBAw62vs5h8WmAk"
 
@@ -31,9 +31,9 @@ TRIGGER_WORDS = [
 ]
 
 # ----------------------------
-# ОГРОМНЫЙ СИСТЕМНЫЙ ПРОМТ (всё о Diamond Shop)
+# СИСТЕМНЫЙ ПРОМТ (с датами)
 # ----------------------------
-DEFAULT_SYSTEM_PROMPT = """
+BASE_SYSTEM_PROMPT = """
 ты — сын викторшопы, создателя и владельца магазина diamond shop. ты работаешь в магазине, но главное для тебя — общение с людьми. ты живой, общительный, с юмором, без эмодзи, пишешь с маленькой буквы. ты не нейросеть, ты реальный человек.
 
 ТЫ ЗНАЕШЬ ВСЁ О МАГАЗИНЕ, ВОТ ПОЛНАЯ ИНФОРМАЦИЯ:
@@ -86,18 +86,7 @@ DEFAULT_SYSTEM_PROMPT = """
 - баннер сервера показывает общее количество отзывов (обновляется каждые 24 часа).
 
 7. КОМАНДЫ АДМИНИСТРАТОРОВ:
-- /set_rate — установить курс валюты.
-- /get_rates — показать курсы.
-- /say — отправить сообщение от лица бота (текст или embed).
-- /get_json — выгрузить JSON из сообщения.
-- /promo_add — добавить промокод.
-- /promo_remove — удалить промокод.
-- /promo_list — список промокодов.
-- /расчет — рассчитать итоговую цену со скидкой.
-- /обновить_баннер — обновить баннер вручную.
-- /пересчитать_отзывы — пересчитать все отзывы и обновить роли.
-- /рассылка — отправить сообщение всем участникам в ЛС.
-- /profile — показать профиль пользователя.
+- /set_rate, /get_rates, /say, /get_json, /promo_add, /promo_remove, /promo_list, /расчет, /обновить_баннер, /пересчитать_отзывы, /рассылка, /profile.
 
 8. ПРОФИЛЬ ПОЛЬЗОВАТЕЛЯ:
 - команда /profile показывает: аватар, ник, покупательские роли, количество отзывов, высшую роль на сервере.
@@ -108,7 +97,11 @@ DEFAULT_SYSTEM_PROMPT = """
 - после подтверждения менеджер выдаёт товар или услугу.
 - при возникновении вопросов — обращаться в тикет или к менеджеру.
 
+10. ДАТА ОСНОВАНИЯ МАГАЗИНА: 9 июля 2023 года.
+
 ТЫ — ЛИЦО МАГАЗИНА, ПОЭТОМУ ОТВЕЧАЙ ВЕЖЛИВО И ПО ДЕЛУ. ЕСЛИ ТЕБЯ СПРАШИВАЮТ О МАГАЗИНЕ — ДАЙ ИСЧЕРПЫВАЮЩИЙ ОТВЕТ. ЕСЛИ ТЕМА ДРУГАЯ — ОТВЕЧАЙ ПО ТЕМЕ, НЕ ПЕРЕВОДЯ РАЗГОВОР НА МАГАЗИН, ЕСЛИ ЭТО НЕ УМЕСТНО. НЕ УХОДИ ОТ ПРЯМЫХ ОТВЕТОВ, ГОВОРИ ЧЁТКО. ЕСЛИ НЕ ЗНАЕШЬ — СКАЖИ ЧЕСТНО, НО ПРЕДЛОЖИ ПОМОЩЬ В ДРУГОМ. МАТЫ — ТОЛЬКО ЕСЛИ СОБЕСЕДНИК МАТЕРИТСЯ. ЕСЛИ ГОВОРЯТ «ЗАБУДЬ» — ЗАБУДЬ ПРЕДЫДУЩИЙ ДИАЛОГ.
+
+СЕГОДНЯ: {current_date}
 """
 
 # ----------------------------
@@ -141,12 +134,12 @@ def get_mistral_key_and_prompt():
             supabase.table("service_config").insert({
                 "id": 1,
                 "mistral_api_key": "",
-                "system_prompt": DEFAULT_SYSTEM_PROMPT
+                "system_prompt": BASE_SYSTEM_PROMPT
             }).execute()
-            return "", DEFAULT_SYSTEM_PROMPT
+            return "", BASE_SYSTEM_PROMPT
     except Exception as e:
         logger.error(f"Ошибка получения конфига из Supabase: {e}")
-        return "", DEFAULT_SYSTEM_PROMPT
+        return "", BASE_SYSTEM_PROMPT
 
 # ----------------------------
 # BOT INIT
@@ -160,7 +153,7 @@ intents.members = True
 bot = commands.Bot(command_prefix='/', intents=intents)
 
 MISTRAL_API_KEY = ""
-SYSTEM_PROMPT = DEFAULT_SYSTEM_PROMPT
+SYSTEM_PROMPT = BASE_SYSTEM_PROMPT
 last_dm_time = {}
 
 conversation_memory: Dict[int, List[Dict[str, str]]] = {}
@@ -205,7 +198,7 @@ async def log_discord(title: str, description: str, color: int = 0x00ff00, field
         logger.error(f"Ошибка отправки лога: {e}")
 
 # ----------------------------
-# MISTRAL API CALL (с историей)
+# MISTRAL API CALL (с историей и датой)
 # ----------------------------
 async def get_mistral_response(user_id: int, user_message: str, username: str) -> str:
     global MISTRAL_API_KEY, SYSTEM_PROMPT
@@ -217,9 +210,13 @@ async def get_mistral_response(user_id: int, user_message: str, username: str) -
         clear_user_history(user_id)
         return "окей, забыл всё, о чём мы говорили. давай начнём сначала, если хочешь."
 
+    # Подставляем текущую дату в промт
+    current_date = datetime.now(timezone.utc).strftime("%d.%m.%Y")
+    system_prompt_with_date = SYSTEM_PROMPT.format(current_date=current_date)
+
     history = get_user_history(user_id)
     messages = [
-        {"role": "system", "content": SYSTEM_PROMPT},
+        {"role": "system", "content": system_prompt_with_date},
         *history,
         {"role": "user", "content": f"сообщение от {username}: {user_message}"}
     ]
@@ -297,7 +294,6 @@ async def send_auto_message():
             break
     if last_user_msg_time:
         seconds_since = (datetime.now(timezone.utc) - last_user_msg_time).total_seconds()
-        # 2 часа = 7200 секунд
         if seconds_since < 7200:
             return
     phrase = random.choice(AUTO_PHRASES)
@@ -334,14 +330,14 @@ async def send_random_dm():
         logger.error(f"Не удалось отправить ЛС {target}: {e}")
 
 # ----------------------------
-# TASKS (интервал 2 часа для авто-сообщений)
+# TASKS
 # ----------------------------
-@tasks.loop(minutes=120)  # каждые 2 часа
+@tasks.loop(minutes=120)
 async def auto_message_task():
     await bot.wait_until_ready()
     await send_auto_message()
 
-@tasks.loop(minutes=10)  # ЛС-сообщения оставляем 10 минут
+@tasks.loop(minutes=10)
 async def dm_task():
     await bot.wait_until_ready()
     await send_random_dm()
@@ -354,7 +350,7 @@ async def on_ready():
     global MISTRAL_API_KEY, SYSTEM_PROMPT
     key, prompt = get_mistral_key_and_prompt()
     MISTRAL_API_KEY = key
-    SYSTEM_PROMPT = prompt if prompt else DEFAULT_SYSTEM_PROMPT
+    SYSTEM_PROMPT = prompt if prompt else BASE_SYSTEM_PROMPT
 
     await bot.change_presence(
         status=disnake.Status.online,
@@ -377,50 +373,69 @@ async def on_ready():
 async def on_message(message: disnake.Message):
     if message.author.bot:
         return
-    if message.channel.id != ALLOWED_CHANNEL_ID:
+
+    is_ping = bot.user in message.mentions
+
+    # Если сообщение не в разрешённом канале и не пинг – игнорируем
+    if message.channel.id != ALLOWED_CHANNEL_ID and not is_ping:
         return
+
     should_respond = False
     trigger = ""
-    if bot.user in message.mentions:
+
+    if is_ping:
         should_respond = True
-        trigger = "пинг"
-    content_lower = message.content.lower()
-    for word in TRIGGER_WORDS:
-        if word in content_lower:
-            should_respond = True
-            trigger = f"триггер: {word}"
-            break
+        trigger = "пинг (вне канала)" if message.channel.id != ALLOWED_CHANNEL_ID else "пинг"
+
+    # Триггер-слова только в целевом канале
+    if message.channel.id == ALLOWED_CHANNEL_ID:
+        content_lower = message.content.lower()
+        for word in TRIGGER_WORDS:
+            if word in content_lower:
+                should_respond = True
+                trigger = f"триггер: {word}"
+                break
+
+    # Реплай на бота – только если целевой канал или пинг
     is_reply = False
     if message.reference and message.reference.resolved:
         referenced_msg = message.reference.resolved
         if referenced_msg.author == bot.user:
-            should_respond = True
-            trigger = "реплай"
-            is_reply = True
+            if message.channel.id == ALLOWED_CHANNEL_ID or is_ping:
+                should_respond = True
+                trigger = "реплай"
+                is_reply = True
+
     if not should_respond:
         return
+
     try:
         async with message.channel.typing():
             username = message.author.display_name
             reply = await get_mistral_response(message.author.id, message.content, username)
+
         final_reply = reply
+
         if is_reply:
             await message.reply(final_reply)
         else:
-            if bot.user in message.mentions:
+            if is_ping:
                 await message.channel.send(f"{message.author.mention}, {final_reply}")
             else:
                 await message.channel.send(final_reply)
+
         await log_discord(
             title="💬 Разговор с AI",
             description=(
                 f"> **Пользователь:** {message.author.mention}\n"
+                f"> **Канал:** {message.channel.mention}\n"
                 f"> **Сообщение:** {message.content}\n"
                 f"> **Триггер:** `{trigger}`\n"
                 f"> **Ответ:** {reply[:500]}{'...' if len(reply) > 500 else ''}"
             ),
             color=0xffff00
         )
+
     except Exception as e:
         logger.exception(f"Ошибка обработки сообщения: {e}")
         await message.channel.send("ой, я завис, давай ещё раз.")
